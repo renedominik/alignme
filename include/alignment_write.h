@@ -631,9 +631,10 @@ void WriteAlignedProfiles
   write << "#Column " << cc++ << " is the one letter amino acid type of the first sequence.\n";
   write << "#Column " << cc++ << " is the residue id within the second sequence.\n";
   write << "#Column " << cc++ << " is the one letter amino acid type of the second sequence.\n";
-  write << "#Column " << cc++ << " denotes anchors for the first sequence - IF ANY.\n";
-  write << "#Column " << cc++ << " denotes anchors for the second sequence - IF ANY.\n";
-  write << "#Please note that gaps are represented by: "<< GAP_VALUE << "\n";
+  write << "#Column " << cc++ << " denotes identical amino acids by '*'\n";
+  write << "#Column " << cc++ << " denotes anchors as 'a' for the first sequence  - IF ANY.\n";
+  write << "#Column " << cc++ << " denotes anchors as 'a' for the second sequence - IF ANY.\n";
+  write << "#Please note that gaps are represented by: "<< GAP_VALUE << "\n  " << std::endl;
 
   cc = 0;
   for( ; itr != alignment.end(); ++itr, ++cc)
@@ -728,31 +729,39 @@ void WriteAlignedProfiles
 
 	  if( itr->first != std::numeric_limits< int>::max())
 	  {
-		  write.width( 7);
+		  write.width(6);
 		  write << itr->first+1 << " ";
 		  write.width( 3);
 		  write << FIRST[ itr->first].GetType() << " ";
 	  }
 	  else
 	  {
-		  write.width( 7);
+		  write.width( 6);
 		  write << GAP_VALUE << " ";
 		  write.width( 3);
 		  write << GAP_VALUE << " ";
 	  }
 	  if( itr->second != std::numeric_limits< int>::max())
 	  {
-		  write.width( 7);
+		  write.width( 6);
 		  write << itr->second+1 << " ";
 		  write.width( 3);
 		  write << SECOND[ itr->second].GetType() << " ";
 	  }
 	  else
 	  {
-		  write.width( 7);
+		  write.width( 6);
 		  write << GAP_VALUE << " ";
 		  write.width( 3);
 		  write << GAP_VALUE << " ";
+	  }
+	  if(  itr->first != std::numeric_limits< int>::max() && itr->second != std::numeric_limits< int>::max() && FIRST[ itr->first].GetType() == SECOND[ itr->second].GetType() )
+	  {
+		  write << " *";
+	  }
+	  else
+	  {
+		  write << "  ";
 	  }
 	  if( ContainsFirst( ANCHORS, itr->first+1 ) )
 	  {
